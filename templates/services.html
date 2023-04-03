@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    {%load static%}
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="{% static 'css/services.css' %}" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+      charset="utf-8"
+    ></script>
+  </head>
+  <body>
+    <div class="topnav">
+      <a href="/" class="active">getHelp</a>
+    </div>
+    <div class="outer">
+
+      {%for x in workers%}
+      <div class="product-card">
+        <h1>{{x.user.name}}</h1>
+        <p>Hey there, I am {{x.user.name}} and I work with determinations.</p>
+        <div class="product-pic">
+          My mail : {{x.user.email}}
+        </div>
+
+        <div class="product-info">
+          <div class="product-price">INR {{x.service.wage}}</div>
+          <a href="/{{x.service.slug}}/{{x.id}}" class="product-button">Select</a>
+        </div>
+      </div>
+      {%endfor%}
+      
+    </div>
+    <script>
+      $(".product-colors span").click(function () {
+        $(".product-colors span").removeClass("active");
+        $(this).addClass("active");
+        $("body").css("background", $(this).attr("data-color"));
+        $(".product-price").css("color", $(this).attr("data-color"));
+        $(".product-button").css("color", $(this).attr("data-color"));
+        $(".product-pic").css("background-image", $(this).attr("data-pic"));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {%load static%}
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/payment.css' %}" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="mainscreen">
+    <div class="card">
+      <div class="leftside">
+        <img src="{% static 'img/back.jpg' %}" class="product" alt="#" />
+      </div>
+      <div class="rightside">
+        <form method="POST" action="/success">
+          {%csrf_token%}
+          <h1>CheckOut</h1>
+          <p>Payment by : {{user.name}}</p>
+          <p>To : <strong>getHelp</strong></p>
+          
+          <h2>Payment Information</h2>
+          <p>Client Name</p>
+          <input type="text" value="{{user.name}}" class="inputbox" name="name" required disabled/>
+
+          <p>Worker Selected</p>
+          <input type="text" value="{{worker.user.name}}" class="inputbox" name="card_number" id="card_number" required disabled/>
+
+          <p>Service</p>
+          <select class="inputbox" name="card_type" id="card_type" required>
+            <option value="">{{service.title}}</option>
+          </select>
+          <div class="expcvv">
+            <p class="expcvv_text">Date</p>
+            <input type="text" class="inputbox" name="pay_date" id="pay_date" required disabled/>
+
+            <p class="expcvv_text2">INR</p>
+            <input type="text" class="inputbox" value="{{service.wage}}" name="amount" id="amount" required disabled/>
+          </div>
+          <p></p>
+          <button id="rzp-button1" type="submit" class="button">Proceed to pay</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    var options = {
+      "key": "{{api_key}}", // Enter the Key ID generated from the Dashboard
+      "name": "Acme Corp",
+      "description": "Test Transaction",
+      "image": "https://example.com/your_logo",
+      "order_id": "{{payment_order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler": function (response) {
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+      },
+      "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+      },
+      "notes": {
+        "address": "Razorpay Corporate Office"
+      },
+      "theme": {
+        "color": "#3399cc"
+      }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response) {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+    document.getElementById('rzp-button1').onclick = function (e) {
+      rzp1.open();
+      e.preventDefault();   
+    }
+
+    const date_field = document.getElementById("pay_date");
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}/${month}/${year}`;
+    date_field.value = currentDate;
+  </script>
+</body>
+
+</html>

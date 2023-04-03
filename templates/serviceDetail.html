@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/serviceDetail.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="topnav">
+        <a href="/" class="active">getHelp</a>
+      </div>
+    <div class="card">
+        <img src="{% static 'img/profile.jpg' %}" alt="cannot load image!" style="width:100%">
+        <h1>{{service.title}} Service</h1>
+        <p class=""><strong>Provided By<strong> {{worker.user.name}}</p>
+        <p class="price">INR {{service.wage}}</p>
+        <p><button><a href="/{{service.slug}}/{{worker.id}}/payment">Select and Make Payment</a></button></p>
+    </div>
+</body>
+</html>
